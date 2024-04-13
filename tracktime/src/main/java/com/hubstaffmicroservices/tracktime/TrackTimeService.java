@@ -14,9 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TrackTimeService{
 
+
     private final TrackTimeRepository trackTimeRepository;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    @Cacheable(value = "myCache", key = "#root.methodName", cacheManager = "cacheManager")
     public TrackTime saveTrackTime() {
         if (startTime == null) {
             startTime = LocalDateTime.now();
@@ -37,14 +40,21 @@ public class TrackTimeService{
                     .startTime(startTime)
                     .endTime(endTimeToUse)
                     .build();
-            return trackTimeRepository.save(timeTracked);
+            return timeTracked;
         }
     }
 
-    @Cacheable(value = "trackTimes" , key = "#root.methodName")
+    public TrackTime saveTrackTimeDataBase(TrackTime timeTracked) {
+        return trackTimeRepository.save(timeTracked);
+    }
+
+
+    @Cacheable(value = "trackTimes" , key = "#root.methodName" , cacheManager = "cacheManager")
     public List<TrackTime> getAllTrackTimes() {
         return trackTimeRepository.findAll();
     }
+
+
 
 
     //    @Override
