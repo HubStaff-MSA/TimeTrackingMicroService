@@ -1,5 +1,6 @@
 package com.hubstaffmicroservices.tracktime;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.*;
 
 @Service
+@Data
 @RequiredArgsConstructor
 public class TrackTimeService{
 
@@ -20,6 +23,41 @@ public class TrackTimeService{
     private LocalDateTime endTime;
 
     private TrackTimeScheduled tracktimescheduled;
+
+
+    private int max_thread ;
+
+
+    private ThreadPoolExecutor executor;
+
+    // Initialize the thread pool with a given maximum number of threads
+    public void initThreadPool(int maxThreads) {
+        executor = new ThreadPoolExecutor(
+                0, // Core pool size (0 to allow flexible scaling)
+                maxThreads, // Maximum pool size (set based on the provided maxThreads parameter)
+                60L, // Keep-alive time for idle threads
+                TimeUnit.SECONDS, // Keep-alive time unit
+                new LinkedBlockingQueue<>(max_thread +10) // Task queue (LinkedBlockingQueue is appropriate for a variety of situations)
+        );
+    }
+
+    // Submit a task to the thread pool executor
+    public void executeTrackTimeTask(Runnable task) {
+        executor.execute(task);
+    }
+
+    // Gracefully shut down the executor
+    public void shutdownThreadPool() {
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
 
     @Cacheable(value = "myCache", key = "#root.methodName", cacheManager = "cacheManager")
     public TrackTime saveTrackTime() {
@@ -42,8 +80,9 @@ public class TrackTimeService{
                     .startTime(startTime)
                     .endTime(endTimeToUse)
                     .build();
-            tracktimescheduled.transferDataFromCacheToDatabase();
-            return timeTracked;
+//            tracktimescheduled.transferDataFromCacheToDatabase();
+            return trackTimeRepository.save(timeTracked);
+
         }
     }
 
@@ -55,6 +94,18 @@ public class TrackTimeService{
     @Cacheable(value = "trackTimes" , key = "#root.methodName" , cacheManager = "cacheManager")
     public List<TrackTime> getAllTrackTimes() {
         return trackTimeRepository.findAll();
+    }
+    public TrackTime executeTrackTimeTask() throws ExecutionException, InterruptedException {
+        // Initialize the thread pool with the given maxThreads parameter
+        initThreadPool(max_thread);
+
+        Future<TrackTime> future = executor.submit(this::saveTrackTime);
+        TrackTime result = future.get(); // This blocks until the task is complete
+
+        // Gracefully shut down the thread pool
+        shutdownThreadPool();
+
+        return result;
     }
 
 

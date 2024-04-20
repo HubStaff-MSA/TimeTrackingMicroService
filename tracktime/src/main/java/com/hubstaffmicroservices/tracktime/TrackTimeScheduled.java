@@ -18,6 +18,8 @@ public class TrackTimeScheduled {
 
     private TrackTimeService trackTimeService; // Assuming you have a service to handle database operations
 
+
+
     @Scheduled(fixedRate = 000) // 24 hours in milliseconds
     public void transferDataFromCacheToDatabase() {
         Cache cache = cacheManager.getCache("myCache");

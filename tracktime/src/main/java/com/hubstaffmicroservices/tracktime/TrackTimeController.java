@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v2/tracktime")
@@ -17,8 +19,10 @@ public class TrackTimeController {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public TrackTime saveTrackTime(
-    ) {
-        return trackTimeService.saveTrackTime();
+            @RequestBody Map<String, Integer> request
+    ) throws ExecutionException, InterruptedException {
+        trackTimeService.setMax_thread(request.get("max_thread"));
+        return trackTimeService.executeTrackTimeTask();
     }
 
     @GetMapping("/all")
