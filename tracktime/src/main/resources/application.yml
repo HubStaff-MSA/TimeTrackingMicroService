@@ -12,11 +12,11 @@ spring:
     name: tracktimes
   config:
     import: optional:configserver:http://localhost:8888
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/abdallahehab
-    username:
-    password:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5433/abdallahehab
+#    username:
+#    password:
   jpa:
     hibernate:
       ddl-auto: create

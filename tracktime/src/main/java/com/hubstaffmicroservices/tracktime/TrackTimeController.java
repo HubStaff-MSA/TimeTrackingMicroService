@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -15,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 public class TrackTimeController {
 
     private final TrackTimeService trackTimeService;
+    private final DatabaseConfig databaseConfig;
+    private final FreezeConfig freezeConfig;
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,6 +28,26 @@ public class TrackTimeController {
         return trackTimeService.executeTrackTimeTask();
     }
 
+    @PostMapping("/addCommand")
+    public Queue<TrackTime> addCommandSaveTrackTime() {
+        return trackTimeService.addCommand();
+    }
+    @PostMapping("/maxConnections")
+    public String updateMaxConnections(@RequestBody int newMaxConnections) {
+        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
+        return "Max connections updated to " + newMaxConnections;
+    }
+    @PostMapping("/freeze")
+    public String freezeApplication() {
+        freezeConfig.setIsFrozen(true);
+        return "Application frozen";
+    }
+
+    @PostMapping("/continue")
+    public String unfreezeApplication() {
+        freezeConfig.setIsFrozen(false);
+        return "Application unfrozen";
+    }
     @GetMapping("/all")
     public List<TrackTime> getAllTrackTimes() {
         return trackTimeService.getAllTrackTimes();

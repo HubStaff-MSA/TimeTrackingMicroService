@@ -1,6 +1,8 @@
 package com.hubstaffmicroservices.tracktime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -8,8 +10,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Track;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.*;
 
 @Service
@@ -21,6 +25,7 @@ public class TrackTimeService{
     private final TrackTimeRepository trackTimeRepository;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Queue<TrackTime> TrackTimeQueue = new ConcurrentLinkedQueue<>();
 
     private TrackTimeScheduled tracktimescheduled;
 
@@ -61,6 +66,7 @@ public class TrackTimeService{
 
     @Cacheable(value = "myCache", key = "#root.methodName", cacheManager = "cacheManager")
     public TrackTime saveTrackTime() {
+
         if (startTime == null) {
             startTime = LocalDateTime.now();
         }
@@ -91,6 +97,7 @@ public class TrackTimeService{
     }
 
 
+
     @Cacheable(value = "trackTimes" , key = "#root.methodName" , cacheManager = "cacheManager")
     public List<TrackTime> getAllTrackTimes() {
         return trackTimeRepository.findAll();
@@ -108,7 +115,11 @@ public class TrackTimeService{
         return result;
     }
 
-
+    public Queue<TrackTime> addCommand() {
+        TrackTime tracktime = TrackTime.builder().build();
+        TrackTimeQueue.add(tracktime);
+        return TrackTimeQueue;
+    }
 
 
     //    @Override
