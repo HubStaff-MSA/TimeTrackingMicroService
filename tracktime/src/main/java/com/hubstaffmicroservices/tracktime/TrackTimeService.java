@@ -19,6 +19,8 @@ public class TrackTimeService{
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    private TrackTimeScheduled tracktimescheduled;
+
     @Cacheable(value = "myCache", key = "#root.methodName", cacheManager = "cacheManager")
     public TrackTime saveTrackTime() {
         if (startTime == null) {
@@ -40,6 +42,7 @@ public class TrackTimeService{
                     .startTime(startTime)
                     .endTime(endTimeToUse)
                     .build();
+            tracktimescheduled.transferDataFromCacheToDatabase();
             return timeTracked;
         }
     }

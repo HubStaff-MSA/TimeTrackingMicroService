@@ -14,7 +14,7 @@ public class TrackTimeController {
 
     private final TrackTimeService trackTimeService;
 
-    @PostMapping
+    @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public TrackTime saveTrackTime(
     ) {
