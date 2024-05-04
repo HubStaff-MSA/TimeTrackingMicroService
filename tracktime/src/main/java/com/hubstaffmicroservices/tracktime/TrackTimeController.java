@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 public class TrackTimeController {
 
     private final TrackTimeService trackTimeService;
-    private final DatabaseConfig databaseConfig;
+//    private final DatabaseConfig databaseConfig;
     private final FreezeConfig freezeConfig;
 
     @PostMapping("/save")
@@ -24,19 +24,27 @@ public class TrackTimeController {
     public TrackTime saveTrackTime(
             @RequestBody Map<String, Integer> request
     ) throws ExecutionException, InterruptedException {
-        trackTimeService.setMax_thread(request.get("max_thread"));
-        return trackTimeService.executeTrackTimeTask();
+//        trackTimeService.setMax_thread(request.get("max_thread"));
+//        return trackTimeService.executeTrackTimeTask();
+        return trackTimeService.saveTrackTime();
     }
+
+    @PostMapping("/excute")
+    public TrackTime excute()
+    {
+        return trackTimeService.excute();
+    }
+
 
     @PostMapping("/addCommand")
     public Queue<TrackTime> addCommandSaveTrackTime() {
         return trackTimeService.addCommand();
     }
-    @PostMapping("/maxConnections")
-    public String updateMaxConnections(@RequestBody int newMaxConnections) {
-        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
-        return "Max connections updated to " + newMaxConnections;
-    }
+//    @PostMapping("/maxConnections")
+//    public String updateMaxConnections(@RequestBody int newMaxConnections) {
+//        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
+//        return "Max connections updated to " + newMaxConnections;
+//    }
     @PostMapping("/freeze")
     public String freezeApplication() {
         freezeConfig.setIsFrozen(true);
@@ -48,6 +56,14 @@ public class TrackTimeController {
         freezeConfig.setIsFrozen(false);
         return "Application unfrozen";
     }
+
+//    @PostMapping("/update")
+//    public TrackTime updateTrackTime(
+//            @RequestBody Map<String, String> request
+//    )
+//        }
+
+
     @GetMapping("/all")
     public List<TrackTime> getAllTrackTimes() {
         return trackTimeService.getAllTrackTimes();

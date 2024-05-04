@@ -1,26 +1,24 @@
 package com.hubstaffmicroservices.tracktime;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.stereotype.Service;
 
-import javax.sound.midi.Track;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.*;
 
 @Service
-@Data
 @RequiredArgsConstructor
-public class TrackTimeService{
+public class TrackTimeService {
 
+    private final CacheManager cacheManager;
 
     private final TrackTimeRepository trackTimeRepository;
     private LocalDateTime startTime;
@@ -64,7 +62,7 @@ public class TrackTimeService{
         }
     }
 
-    @Cacheable(value = "myCache", key = "#root.methodName", cacheManager = "cacheManager")
+    @CachePut(value = "myCache", key = "3", cacheManager = "cacheManager")
     public TrackTime saveTrackTime() {
 
         if (startTime == null) {
@@ -73,27 +71,40 @@ public class TrackTimeService{
         LocalDateTime endTimeToUse = endTime != null ? endTime : LocalDateTime.now();
 
         // Check if there's an existing entry for the same user ID
-        TrackTime existingTrackTime = trackTimeRepository.findByUserId(2);
-
+//        TrackTime existingTrackTime = trackTimeRepository.findByUserId(3);
+        Cache cache = cacheManager.getCache("myCache");
+        RedisCache.ValueWrapper valueWrapper = cache.get("3");
+        TrackTime existingTrackTime;
+        if(valueWrapper != null) {
+            existingTrackTime = (TrackTime) valueWrapper.get();
+        }
+        else {
+            existingTrackTime = null;
+        }
         if (existingTrackTime != null) {
             // Update endTime for the existing entry
+
             existingTrackTime.setEndTime(endTimeToUse);
-            return trackTimeRepository.save(existingTrackTime);
+//            cache.put("3",existingTrackTime);
+//            return trackTimeRepository.save(existingTrackTime);
+            return existingTrackTime;
         } else {
             // Create a new entry
             var timeTracked = TrackTime.builder()
-                    .userId(2)
+                    .userId(3)
                     .startTime(startTime)
-                    .endTime(endTimeToUse)
+                    .endTime(endTime)
                     .build();
 //            tracktimescheduled.transferDataFromCacheToDatabase();
-            return trackTimeRepository.save(timeTracked);
+//            return trackTimeRepository.save(timeTracked);
+            return timeTracked;
 
         }
     }
 
-    public TrackTime saveTrackTimeDataBase(TrackTime timeTracked) {
-        return trackTimeRepository.save(timeTracked);
+    public void saveTrackTimeDataBase(TrackTime timeTracked) {
+
+        trackTimeRepository.save(timeTracked);
     }
 
 
@@ -121,6 +132,22 @@ public class TrackTimeService{
         return TrackTimeQueue;
     }
 
+    public TrackTime excute()
+    {
+        TrackTime trackTime = TrackTimeQueue.poll();
+        TrackTime currentTrackTime = saveTrackTime();
+        trackTime.setId(currentTrackTime.getId());
+        trackTime.setStartTime(currentTrackTime.getStartTime());
+        trackTime.setEndTime(currentTrackTime.getEndTime());
+        trackTime.setUserId(currentTrackTime.getUserId());
+        return trackTime;
+    }
+
+    public TrackTime updateTracktime(Map<String,String> newtracktime) {
+        TrackTime trackTime = new TrackTime();
+        trackTime.updateAttributeNames(newtracktime);
+        return trackTime;
+    }
 
     //    @Override
 //    public void onApplicationEvent(ContextClosedEvent event) {

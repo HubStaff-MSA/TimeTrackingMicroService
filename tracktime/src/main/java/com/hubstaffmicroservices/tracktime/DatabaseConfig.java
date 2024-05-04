@@ -10,14 +10,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-@Configuration
-@Data
+//@Configuration
+//@Data
 public class DatabaseConfig {
 
-    private int set_max_db_connections_count = 1;
+    private int set_max_db_connections_count = 4;
     private HikariDataSource dataSource; // Store a reference to the data source
 
-    @Bean
+//    @Bean
     public HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
 
@@ -43,7 +43,7 @@ public class DatabaseConfig {
         return new HikariDataSource(config);
     }
 
-    @Bean
+//    @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
