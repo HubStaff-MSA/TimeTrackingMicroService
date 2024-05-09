@@ -2,11 +2,14 @@ package com.example.postgres.repositories;
 
 import com.example.postgres.models.Timesheets;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-public interface TimesheetRepo extends JpaRepository<Timesheets,Integer> {
+@Repository
+public interface TimesheetRepo extends JpaRepository<Timesheets,Long> {
+/*
     // Query method to find timesheets by user ID
     List<Timesheets> findByUserId(Integer userId);
 
@@ -26,5 +29,5 @@ public interface TimesheetRepo extends JpaRepository<Timesheets,Integer> {
     void deleteByUserId(Integer userId);
 
     // Custom repository method to delete timesheets by project ID
-    void deleteByProjectId(Integer projectId);
+    void deleteByProjectId(Integer projectId);*/
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,19 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Timesheetresponse {
-    private Integer timesheetId;
+    private Long id;
 
-    private Integer userID;
-    private LocalDateTime date;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-
-    private float duration;
-
-    private Integer projectID;
-
-    private Integer taskID;
-
-    private int status;
-    private boolean approved;
+    private Long memberId;
+    private String payPeriod;
+    private double duration;
+    private String actions;
+    private String status;
+    private String denyComments;
+    private String approvedBy;
+    private LocalDateTime createdAt;
 }

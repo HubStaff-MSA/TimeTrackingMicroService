@@ -20,7 +20,7 @@ public class  PostgresApplication {
 			for(int i=0; i<50;i++){
 				Faker faker=new Faker();
 				var sheet= Timesheets.builder()
-						.userID(faker.number().numberBetween(1,50))
+						.memberId((long) faker.number().numberBetween(1,50))
 						.build();
 				repository.save(sheet);
 			}

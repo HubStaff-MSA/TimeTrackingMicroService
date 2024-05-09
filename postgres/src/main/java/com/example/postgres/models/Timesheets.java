@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -15,6 +18,102 @@ import java.util.Date;
 @Table(name="Timesheets")
 public class Timesheets {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long memberId;
+    private String payPeriod; // format: "start date - end date"
+    private double duration;
+    private String actions;
+    private String status;
+    private String denyComments;
+    private String approvedBy;
+    private LocalDateTime createdAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getPayPeriod() {
+        return payPeriod;
+    }
+
+    public void setPayPeriod(String payPeriod) {
+        this.payPeriod = payPeriod;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public String getActions() {
+        return actions;
+    }
+
+    public void setActions(String actions) {
+        this.actions = actions;
+    }
+
+    public String getDenyComments() {
+        return denyComments;
+    }
+
+    public void setDenyComments(String denyComments) {
+        this.denyComments = denyComments;
+    }
+
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    public LocalDateTime getStartDateFromPayPeriod() {
+        String[] parts = payPeriod.split(" - ");
+        String startDateString = parts[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(startDateString, formatter);
+    }
+
+    public LocalDateTime getEndDateFromPayPeriod() {
+        String[] parts = payPeriod.split(" - ");
+        String endDateString = parts[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(endDateString, formatter);
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+  /*  @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "timesheet_sequence"
@@ -35,18 +134,18 @@ public class Timesheets {
             updatable = false//,
            // nullable = false
     )
-    private LocalDateTime date;
+    private LocalDate date;
     @Column(
             updatable = false//,
             //nullable = false
     )
-    private LocalDateTime startTime;
+    private LocalDate startTime;
     @Column(
             updatable = false//,
            // nullable = false
     )
-    private LocalDateTime endTime;
-
+    private LocalDate endTime;
+    @Transient
     private float duration;
 
     private Integer projectID;
@@ -66,36 +165,40 @@ public class Timesheets {
         this.userID = userID;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalDate getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalDate startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalDate getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(LocalDate endTime) {
         this.endTime = endTime;
         // Recalculate duration when endTime is set
         calculateDuration();
     }
 
-    public float getDuration() {
-        return duration;
+    public long getDuration() {
+        if (startTime != null && endTime != null) {
+            Duration duration = Duration.between(startTime, endTime);
+            return duration.toMinutes(); // Return duration in minutes
+        } else {
+            return 0; // Or handle null values as appropriate for your application
+        }
     }
-
     public void setDuration(float duration) {
         this.duration = duration;
     }
@@ -134,6 +237,6 @@ public class Timesheets {
         } else {
             this.duration = 0; // Or handle null values as appropriate for your application
         }
-    }
+    }*/
 }
 
