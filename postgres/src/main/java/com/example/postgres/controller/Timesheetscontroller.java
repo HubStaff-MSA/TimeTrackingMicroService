@@ -1,12 +1,8 @@
 package com.example.postgres.controller;
 
-import com.example.postgres.dto.Timesheetresponse;
-import com.example.postgres.models.Timesheets;
-import com.example.postgres.service.Timesheet;
-import com.example.postgres.dto.TimesheetRequest;
+import com.example.postgres.models.Approvaltimesheet;
+import com.example.postgres.service.approvaltimesheetService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/timesheets")
 @RequiredArgsConstructor
 public class Timesheetscontroller {
-    private final Timesheet timesheetService;
+    private final approvaltimesheetService approvaltimesheetServiceService;
 
    /* @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -24,13 +20,13 @@ public class Timesheetscontroller {
     }*/
 
     @GetMapping("/allTimesheets")
-    public List<Timesheets> getAllTimesheets() {
-        return timesheetService.getAllTimesheets();
+    public List<Approvaltimesheet> getAllTimesheets() {
+        return approvaltimesheetServiceService.getAllTimesheets();
     }
 
     @GetMapping("/{id}")
-    public Timesheets getTimesheetById(@PathVariable Long id) {
-        return timesheetService.getTimesheetById(id);
+    public Approvaltimesheet getTimesheetById(@PathVariable Long id) {
+        return approvaltimesheetServiceService.getTimesheetById(id);
     }
 
    /* @PutMapping("/{id}")
@@ -45,12 +41,12 @@ public class Timesheetscontroller {
 
     @PutMapping("/{id}/approve")
     public void approveTimesheet(@PathVariable Long id, @RequestParam String approvedBy) {
-        timesheetService.approveTimesheet(id, approvedBy);
+        approvaltimesheetServiceService.approveTimesheet(id, approvedBy);
     }
 
     @PutMapping("/{id}/deny")
     public void denyTimesheet(@PathVariable Long id, @RequestParam String denyComments) {
-        timesheetService.denyTimesheet(id, denyComments);
+        approvaltimesheetServiceService.denyTimesheet(id, denyComments);
     }
 
    /* @PostMapping("/createTimesheets")
