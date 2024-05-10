@@ -5,12 +5,10 @@ import com.hubstaffmicroservices.tracktime.UpdatedClass;
 import com.hubstaffmicroservices.tracktime.TrackTime;
 import com.hubstaffmicroservices.tracktime.TrackTimeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentMap;
@@ -53,19 +51,33 @@ public class ControlApplication {
 
 
     @PostMapping("/addcommand")
-    public ConcurrentMap<String, String> addCommand(@RequestBody Map<String, String> request) {
-        UpdatedClass.add(request.get("name"), request.get("name"));
+    public ConcurrentMap<String, Class<?>> addCommand(@RequestBody Map<String, String> request) throws IOException {
+        try {
+            UpdatedClass.add(request.get("name"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return UpdatedClass.returnMap();
     }
 
-
-    @PostMapping("/deletecommand")
-    public ConcurrentMap<String, String> deleteCommand(@RequestBody Map<String, String> request) throws NoSuchFieldException {
-
-        UpdatedClass.delete(request.get("name"));
-        return UpdatedClass.returnMap();
-
+    @GetMapping("/getFields")
+    public String getFields() {
+        String fieldsString = "";
+        Field[] fields = UpdatedClass.class.getFields();
+        for (Field field : fields) {
+            fieldsString += field.getName() + " ";
+        }
+        return fieldsString;
     }
+
+//    @PostMapping("/deletecommand")
+//    public ConcurrentMap<String, String> deleteCommand(@RequestBody Map<String, String> request) throws NoSuchFieldException {
+//
+//        UpdatedClass.delete(request.get("name"));
+//        return UpdatedClass.returnMap();
+//
+//    }
+
 
 
 }
