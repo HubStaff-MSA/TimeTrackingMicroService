@@ -1,10 +1,13 @@
 package com.hubstaffmicroservices.tracktime;
 
 
+import com.hubstaffmicroservices.tracktime.Controller.BigController;
+import com.hubstaffmicroservices.tracktime.Controller.FreezeConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -17,7 +20,7 @@ public class TrackTimeController {
 
     private final TrackTimeService trackTimeService;
 //    private final DatabaseConfig databaseConfig;
-    private final FreezeConfig freezeConfig;
+
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,35 +37,6 @@ public class TrackTimeController {
     {
         return trackTimeService.excute();
     }
-
-
-    @PostMapping("/addCommand")
-    public Queue<TrackTime> addCommandSaveTrackTime() {
-        return trackTimeService.addCommand();
-    }
-//    @PostMapping("/maxConnections")
-//    public String updateMaxConnections(@RequestBody int newMaxConnections) {
-//        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
-//        return "Max connections updated to " + newMaxConnections;
-//    }
-    @PostMapping("/freeze")
-    public String freezeApplication() {
-        freezeConfig.setIsFrozen(true);
-        return "Application frozen";
-    }
-
-    @PostMapping("/continue")
-    public String unfreezeApplication() {
-        freezeConfig.setIsFrozen(false);
-        return "Application unfrozen";
-    }
-
-//    @PostMapping("/update")
-//    public TrackTime updateTrackTime(
-//            @RequestBody Map<String, String> request
-//    )
-//        }
-
 
     @GetMapping("/all")
     public List<TrackTime> getAllTrackTimes() {

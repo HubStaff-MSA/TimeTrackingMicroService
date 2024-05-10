@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisHash;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
@@ -37,6 +38,14 @@ public class TrackTime implements Serializable {
     private Integer id;
 
 
+    @Column(
+            nullable = false
+    )
+    private String project;
+
+    @Column
+    private String to_do;
+
     private Integer userId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -48,6 +57,11 @@ public class TrackTime implements Serializable {
     )
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate day; // Adding the new column for day
+
 
 
     public void updateAttributeNames(Map<String, String> attributeMappings) {

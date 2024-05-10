@@ -31,7 +31,6 @@ public class TrackTimeScheduled {
     @Scheduled(fixedRate = 20000) // 24 hours in milliseconds
     public void transferDataFromCacheToDatabase() {
 
-//        logger.info("Transfer data from cache to database " + LocalDateTime.now());
 //        System.out.println("Transfer data from cache to database " + LocalDateTime.now());
         Cache cache = cacheManager.getCache("myCache");
 //        System.out.println("valueWrapper");

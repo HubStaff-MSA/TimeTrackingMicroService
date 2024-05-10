@@ -1,4 +1,4 @@
-package com.hubstaffmicroservices.tracktime;
+package com.hubstaffmicroservices.tracktime.Controller;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -92,8 +93,10 @@ public class TrackTimeService {
             // Create a new entry
             var timeTracked = TrackTime.builder()
                     .userId(3)
+                    .project("create HubStaff")
                     .startTime(startTime)
                     .endTime(endTime)
+                    .day(LocalDate.now())
                     .build();
 //            tracktimescheduled.transferDataFromCacheToDatabase();
 //            return trackTimeRepository.save(timeTracked);
