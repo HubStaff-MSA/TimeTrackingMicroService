@@ -1,4 +1,5 @@
 package com.hubstaffmicroservices.tracktime.Commands;
 
-public class myCommand {
+public interface Command {
+    void excute();
 }

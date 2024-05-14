@@ -1,5 +1,6 @@
 package com.hubstaffmicroservices.tracktime.Controller;
 
+import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
 import com.hubstaffmicroservices.tracktime.UpdatedClass;
 
 import com.hubstaffmicroservices.tracktime.TrackTime;
@@ -59,6 +60,12 @@ public class ControlApplication {
         }
         return UpdatedClass.returnMap();
     }
+    @PostMapping("/deletecommand")
+    public ConcurrentMap<String, Class<?>> deleteCommand(@RequestBody Map<String, String> request) throws IOException {
+        UpdatedClass.delete(request.get("name"));
+        return UpdatedClass.returnMap();
+    }
+
 
     @GetMapping("/getFields")
     public String getFields() {
@@ -70,13 +77,21 @@ public class ControlApplication {
         return fieldsString;
     }
 
-//    @PostMapping("/deletecommand")
-//    public ConcurrentMap<String, String> deleteCommand(@RequestBody Map<String, String> request) throws NoSuchFieldException {
-//
-//        UpdatedClass.delete(request.get("name"));
-//        return UpdatedClass.returnMap();
-//
-//    }
+    @PostMapping("/updatecommand")
+    public ConcurrentMap<String, Class<?>> updateCommand(@RequestBody Map<String, String> request) throws NoSuchFieldException {
+
+        UpdatedClass.update(request.get("name"));
+        return UpdatedClass.returnMap();
+
+    }
+
+    @PostMapping("/testupdatecommand")
+    public int testUpdateCommand(@RequestBody Map<String, Integer> request)  {
+
+        var c = LastCommand.add(request.get("a") , request.get("b"));
+        return c;
+    }
+
 
 
 

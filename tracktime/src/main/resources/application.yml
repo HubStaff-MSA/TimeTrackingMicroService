@@ -31,11 +31,13 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
-  devtools:
-    restart:
-      enabled: true
-    livereload:
-      enabled: true
+#  devtools:
+#    restart:
+#      enabled: true
+#      exclude: static/**,public/**
+#    restart:
+#      enabled: true
+#      exclude: /com/hubstaffmicroservices/tracktime/UpdatedClass\.java
 
 
 

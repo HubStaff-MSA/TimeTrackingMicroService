@@ -9,5 +9,5 @@ public interface TrackTimeRepository extends JpaRepository<TrackTime, Integer> {
 
 //    List<TrackTime> findAllBy
     TrackTime findByUserId(int i);
-
+     TrackTime findByIdAndOrganizationID(Integer id, int organizationID);
 }

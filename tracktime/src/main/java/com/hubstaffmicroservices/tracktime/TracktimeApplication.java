@@ -1,19 +1,16 @@
 package com.hubstaffmicroservices.tracktime;
 
-import com.hubstaffmicroservices.tracktime.UpdatedClass;
-
 import com.hubstaffmicroservices.tracktime.Controller.BigController;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.concurrent.ConcurrentMap;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 @SpringBootApplication
@@ -26,7 +23,8 @@ public class TracktimeApplication {
 	BigController bigController = new BigController();
 //	TrackTimeScheduled trackTimeScheduled = new TrackTimeScheduled();
     public static void main(String[] args) {
-		UpdatedClass.instantiate();
+//		System.setProperty("spring.devtools.restart.enabled", "false");
+//		UpdatedClass.instantiate();
 		SpringApplication.run(TracktimeApplication.class, args);
 
 	}
@@ -49,7 +47,14 @@ public class TracktimeApplication {
 //				System.out.println(bigController.TestModify());
 //				System.out.println(bigController.replace("com.hubstaffmicroservices.tracktime.UpdatedClass", "add",bigController.TestModify()));
 //				UpdatedClass.instantiate();
+				LocalDateTime startTime = LocalDateTime.parse("2024-05-14T14:12:35.985090");
+				LocalDateTime endTime = LocalDateTime.parse("2024-05-14T14:12:38.831910");
 
+				// Calculate the duration
+				Duration duration = Duration.between(startTime, endTime);
+
+				// Print the duration in milliseconds
+				System.out.println("Duration: " + duration.toMillis() + " milliseconds");
 
 
 			}
