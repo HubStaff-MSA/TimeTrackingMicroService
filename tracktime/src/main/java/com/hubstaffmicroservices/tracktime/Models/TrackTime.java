@@ -1,4 +1,4 @@
-package com.hubstaffmicroservices.tracktime;
+package com.hubstaffmicroservices.tracktime.Models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

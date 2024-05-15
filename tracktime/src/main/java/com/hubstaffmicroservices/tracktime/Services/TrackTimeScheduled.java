@@ -1,21 +1,17 @@
-package com.hubstaffmicroservices.tracktime;
+package com.hubstaffmicroservices.tracktime.Services;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.hubstaffmicroservices.tracktime.Models.TrackTime;
+import com.hubstaffmicroservices.tracktime.Repos.TrackTimeRepository;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -60,7 +56,9 @@ public class TrackTimeScheduled {
                             .endTime(trackTime.getEndTime())
                             .duration(durationSeconds)
                             .build();
-                    trackTimeService.saveTrackTimeDataBase(newtrackTime);
+                            if (newtrackTime.getEndTime() != null) {
+                                trackTimeService.saveTrackTimeDataBase(newtrackTime);
+                            }
                 }
 
 //                TrackTime existingTrackTime = trackTimeRepository.findByUserId(3);

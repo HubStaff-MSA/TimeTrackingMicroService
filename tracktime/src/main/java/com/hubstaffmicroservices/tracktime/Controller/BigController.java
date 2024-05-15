@@ -25,7 +25,6 @@ public class BigController {
             fieldsString += field.getName() + " ";
         }
 
-
         return  fieldsString;
     }
 
@@ -37,6 +36,5 @@ public class BigController {
 //        System.out.println(byteString);
         return byteString;
     }
-
 
 }

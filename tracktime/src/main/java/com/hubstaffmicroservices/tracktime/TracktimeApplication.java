@@ -1,6 +1,7 @@
 package com.hubstaffmicroservices.tracktime;
 
 import com.hubstaffmicroservices.tracktime.Controller.BigController;
+import com.hubstaffmicroservices.tracktime.Controller.CommandsMap;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,9 +19,6 @@ import java.time.LocalDateTime;
 @EnableCaching
 public class TracktimeApplication {
 
-
-	UpdatedClass updatedClass = new UpdatedClass();
-	BigController bigController = new BigController();
 //	TrackTimeScheduled trackTimeScheduled = new TrackTimeScheduled();
     public static void main(String[] args) {
 //		System.setProperty("spring.devtools.restart.enabled", "false");
@@ -41,11 +39,11 @@ public class TracktimeApplication {
 //				System.out.println("Active Connections: " + poolMXBean.getActiveConnections());
 //				System.out.println("Idle Connections: " + poolMXBean.getIdleConnections());
 //				System.out.println("Total Connections: " + poolMXBean.getTotalConnections());
-				Class<?> newCommand = Class.forName("com.hubstaffmicroservices.tracktime.UpdatedClass");
+				Class<?> newCommand = Class.forName("com.hubstaffmicroservices.tracktime.Controller.CommandsMap");
 //				trackTimeScheduled.transferDataFromCacheToDatabase();
 //				System.out.println(newCommand);
 //				System.out.println(bigController.TestModify());
-//				System.out.println(bigController.replace("com.hubstaffmicroservices.tracktime.UpdatedClass", "add",bigController.TestModify()));
+//				System.out.println(bigController.replace("com.hubstaffmicroservices.tracktime.Controller.UpdatedClass", "add",bigController.TestModify()));
 //				UpdatedClass.instantiate();
 				LocalDateTime startTime = LocalDateTime.parse("2024-05-14T14:12:35.985090");
 				LocalDateTime endTime = LocalDateTime.parse("2024-05-14T14:12:38.831910");

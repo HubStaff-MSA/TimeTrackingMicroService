@@ -1,23 +1,18 @@
 package com.hubstaffmicroservices.tracktime;
 
 
-import com.hubstaffmicroservices.tracktime.Commands.getTimeSheetCommand;
-import com.hubstaffmicroservices.tracktime.Controller.BigController;
-import com.hubstaffmicroservices.tracktime.Controller.FreezeConfig;
+import com.hubstaffmicroservices.tracktime.Controller.CommandsMap;
+import com.hubstaffmicroservices.tracktime.Models.TrackTime;
+import com.hubstaffmicroservices.tracktime.Services.TrackTimeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v2/tracktime")
@@ -61,7 +56,7 @@ public class TrackTimeController {
 
     @PostMapping("/getTimeSheet")
     public String getTimeSheet(@RequestBody Map<String, ?> request) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
-        Field cmdMapField = UpdatedClass.class.getDeclaredField("cmdMap");
+        Field cmdMapField = CommandsMap.class.getDeclaredField("cmdMap");
 
         // Make the field accessible
         cmdMapField.setAccessible(true);
@@ -126,5 +121,15 @@ public class TrackTimeController {
     public String CacheTimeSheet() {
         String result = trackTimeService.getListofTracktime();
         return result;
+    }
+
+    @PostMapping("/addtimesheet")
+    public ResponseEntity<?> addTimeSheet(@RequestBody TrackTime request) {
+        try {
+            trackTimeService.saveTrackTimeDataBase(request);
+            return ResponseEntity.ok("Track time saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

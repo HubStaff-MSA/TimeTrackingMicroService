@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 
 @Slf4j
 @Configuration
@@ -23,13 +26,17 @@ public class FreezeConfig {
         return () -> {
             // Check isFrozen flag and freeze if true
             if (isFrozen) {
-                freeze();
+                try {
+                    freeze();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
     }
 
     // Setter method for isFrozen flag
-    public synchronized void setIsFrozen(boolean isFrozen) {
+    public synchronized void setIsFrozen(boolean isFrozen) throws SQLException {
         // If isFrozen is set to true, freeze the application
         if (isFrozen) {
             log.info("Freezing application...");
@@ -42,8 +49,10 @@ public class FreezeConfig {
         }
     }
 
-    private synchronized void freeze() {
+    private synchronized void freeze() throws SQLException {
+//       Connection myconnection =  dataSource.getConnection();
         isFrozen = true;
+//        dataSource.evictConnection(myconnection);
         dataSource.close();
     }
 

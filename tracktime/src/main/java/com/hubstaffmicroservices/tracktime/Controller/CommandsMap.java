@@ -1,14 +1,12 @@
-package com.hubstaffmicroservices.tracktime;
+package com.hubstaffmicroservices.tracktime.Controller;
 
 import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
 import com.hubstaffmicroservices.tracktime.Commands.getTimeSheetCommand;
-import com.hubstaffmicroservices.tracktime.Controller.MyClassLoader;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +15,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class UpdatedClass {
+public class CommandsMap {
 
     public static ConcurrentMap<String, Class<?>> cmdMap;
 
