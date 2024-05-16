@@ -18,6 +18,7 @@ public class SchoolController {
     @ResponseStatus(HttpStatus.CREATED)
     public School saveSchool(
             @RequestBody School school
+
     ) {
         return schoolService.saveSchool(school);
     }

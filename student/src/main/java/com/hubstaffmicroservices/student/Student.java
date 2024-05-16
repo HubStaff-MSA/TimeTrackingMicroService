@@ -24,6 +24,5 @@ public class Student {
     private String lastName;
 
     private String email;
-
-    private Integer schoolId;
+    
 }
