@@ -7,7 +7,7 @@ eureka:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 server:
-  port: 8761
+  port: 8762
 spring:
   config:
     import: optional:configserver:http://localhost:8888

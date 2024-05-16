@@ -11,22 +11,24 @@ spring:
   application:
     name: tracktimes
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8050
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/abdallahehab
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/abdallahehab
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: create
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  cache:
-    type: redis
-  data:
-    redis:
-      host: localhost
-      port: 6379
+    rabbitmq:
+      addresses: localhost:5672
+#  cache:
+#    type: redis
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
 
 
