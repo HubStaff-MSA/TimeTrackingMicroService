@@ -2,9 +2,12 @@ package com.hubstaffmicroservices.tracktime.Services;
 
 import com.hubstaffmicroservices.tracktime.Models.TrackTime;
 import com.hubstaffmicroservices.tracktime.Repos.TrackTimeRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,12 +21,13 @@ import java.util.concurrent.*;
 @RequiredArgsConstructor
 public class TrackTimeService {
 
+//    @Autowired
     private final CacheManager cacheManager;
 
     private final TrackTimeRepository trackTimeRepository;
 //    private LocalDateTime startTime;
 //    private LocalDateTime endTime;
-    private Queue<TrackTime> TrackTimeQueue = new ConcurrentLinkedQueue<>();
+//    private Queue<TrackTime> TrackTimeQueue = new ConcurrentLinkedQueue<>();
 
     private TrackTimeScheduled tracktimescheduled;
 
@@ -216,11 +220,11 @@ public class TrackTimeService {
     }
 
 
-    public Queue<TrackTime> addCommand() {
-        TrackTime tracktime = TrackTime.builder().build();
-        TrackTimeQueue.add(tracktime);
-        return TrackTimeQueue;
-    }
+//    public Queue<TrackTime> addCommand() {
+//        TrackTime tracktime = TrackTime.builder().build();
+//        TrackTimeQueue.add(tracktime);
+//        return TrackTimeQueue;
+//    }
 
 
 

@@ -67,7 +67,8 @@ public class TrackTimeController {
 
         Class<?> commandClass = (Class<?>) cmdMap.get(request.get("command"));
 
-        Object commandInstance = commandClass.newInstance();
+//        Object commandInstance = commandClass.newInstance();
+        Object commandInstance = commandClass.getDeclaredConstructor(TrackTimeService.class).newInstance(trackTimeService);
 
 //         Get the build method of the command class
         Method buildMethod = commandClass.getDeclaredMethod("build", String.class);
@@ -76,7 +77,7 @@ public class TrackTimeController {
         buildMethod.invoke(commandInstance, request.get("payload"));
 
         // Get the execute method of the command class
-        Method executeMethod = commandClass.getDeclaredMethod("excute", null);
+        Method executeMethod = commandClass.getDeclaredMethod("execute", null);
 
         // Invoke the execute method
         executeMethod.invoke(commandInstance);

@@ -24,10 +24,10 @@ public class ControlApplication {
     private final FreezeConfig freezeConfig;
 
     private final BigController bigController;
-    @PostMapping("/addCommand")
-    public Queue<TrackTime> addCommandSaveTrackTime() {
-        return trackTimeService.addCommand();
-    }
+//    @PostMapping("/addCommand")
+//    public Queue<TrackTime> addCommandSaveTrackTime() {
+//        return trackTimeService.addCommand();
+//    }
     //    @PostMapping("/maxConnections")
 //    public String updateMaxConnections(@RequestBody int newMaxConnections) {
 //        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
