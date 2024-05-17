@@ -10,16 +10,18 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
-public class TrackTimeService {
+public class TrackTimeService{
 
 //    @Autowired
     private final CacheManager cacheManager;
@@ -218,6 +220,16 @@ public class TrackTimeService {
     public TrackTime getTimeSheet(int id , int organisationID) {
         return trackTimeRepository.findByIdAndOrganizationID(id,organisationID);
     }
+
+    public List<TrackTime> getListOfTrackTimeByUserId(int userId) {
+        return trackTimeRepository.findAllByUserId(userId);
+    }
+
+    public Map<String, Map<LocalDate, Duration>> getTotalDurationByUserIdsAndDays(List<Integer> userIds) {
+        return trackTimeRepository.getTotalDurationByUserIdsAndDays(userIds);
+    }
+
+//    public
 
 
 //    public Queue<TrackTime> addCommand() {

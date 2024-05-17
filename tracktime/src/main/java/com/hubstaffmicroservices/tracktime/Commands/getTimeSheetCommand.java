@@ -1,5 +1,6 @@
 package com.hubstaffmicroservices.tracktime.Commands;
 
+import com.hubstaffmicroservices.tracktime.Commands.Command;
 import com.hubstaffmicroservices.tracktime.Models.TrackTime;
 import com.hubstaffmicroservices.tracktime.Services.TrackTimeService;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Builder
 @Data
 @NoArgsConstructor(force = true)
-public class getTimeSheetCommand implements Command {
+public class getTimeSheetCommand  implements Command {
 
     private int organizationID;
 
@@ -31,10 +32,13 @@ public class getTimeSheetCommand implements Command {
     @Override
     public void execute() {
         this.returned = trackTimeService.getTimeSheet(organizationID, userID);
+        if(this.organizationID == 1 && this.userID == 1){
+            System.out.println("Invalid organizationID or userID");
+        }
     }
 
-    public void build(String payload) {
-        this.organizationID = Integer.parseInt(payload.split(",")[0]);
-        this.userID = Integer.parseInt(payload.split(",")[1]);
+    public void build(Object payload) {
+        this.organizationID = Integer.parseInt(((String)payload).split(",")[0]);
+        this.userID = Integer.parseInt(((String)payload).split(",")[1]);
     }
 }

@@ -3,6 +3,7 @@ package com.hubstaffmicroservices.tracktime;
 
 import com.hubstaffmicroservices.tracktime.Controller.CommandsMap;
 import com.hubstaffmicroservices.tracktime.Models.TrackTime;
+import com.hubstaffmicroservices.tracktime.Services.BigService;
 import com.hubstaffmicroservices.tracktime.Services.TrackTimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TrackTimeController {
 
     private final TrackTimeService trackTimeService;
+//    private final BigService bigService;
 //    private final DatabaseConfig databaseConfig;
 
 
@@ -71,7 +73,7 @@ public class TrackTimeController {
         Object commandInstance = commandClass.getDeclaredConstructor(TrackTimeService.class).newInstance(trackTimeService);
 
 //         Get the build method of the command class
-        Method buildMethod = commandClass.getDeclaredMethod("build", String.class);
+        Method buildMethod = commandClass.getDeclaredMethod("build", Object.class);
 
         // Invoke the build method
         buildMethod.invoke(commandInstance, request.get("payload"));

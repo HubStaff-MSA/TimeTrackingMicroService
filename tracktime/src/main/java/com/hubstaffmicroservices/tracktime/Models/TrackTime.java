@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 //@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrackTime implements Serializable {
 
-
     @Id
     @GeneratedValue
     private Integer id;
@@ -53,6 +52,9 @@ public class TrackTime implements Serializable {
 
     @Column
     private Integer userId;
+
+    @Column
+    private String userName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
