@@ -91,10 +91,10 @@ public class TrackTimeController {
         returnedField.setAccessible(true);
 
         // Get the value of the returned field from the command instance
-        String returnedValue = (String) returnedField.get(commandInstance);
+        Object returnedValue = (Object) returnedField.get(commandInstance);
 
         // Cast the returned value to TrackTime
-        return returnedValue;
+        return returnedValue.toString();
     }
 
 
@@ -105,9 +105,9 @@ public class TrackTimeController {
 
 
     @PostMapping("/startTrackTimeSheet")
-    public ResponseEntity<?> startTrackTimeSheet(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> startTrackTimeSheet(@RequestBody TrackTime request) {
        try{
-           trackTimeService.startTrackTimeSheet(request.get("project"), request.get("to_do"));
+           trackTimeService.startTrackTimeSheet(request);
            return ResponseEntity.ok("Track time started successfully");
        } catch (Exception e) {
            return ResponseEntity.badRequest().body(e.getMessage());

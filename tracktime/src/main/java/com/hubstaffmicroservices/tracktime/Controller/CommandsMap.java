@@ -1,6 +1,7 @@
 package com.hubstaffmicroservices.tracktime.Controller;
 
 import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
+import com.hubstaffmicroservices.tracktime.Commands.ListOfTimeTracksByUsersIds;
 import com.hubstaffmicroservices.tracktime.Commands.getTimeSheetCommand;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,8 @@ public class CommandsMap {
     public static void instantiate() {
         cmdMap = new ConcurrentHashMap<>();
         cmdMap.put("add", LastCommand.class);
-        cmdMap.put("get_timesheet" , getTimeSheetCommand.class);
+        cmdMap.put("getTimeSheetCommand" , getTimeSheetCommand.class);
+        cmdMap.put("ListOfTimeTracksByUsersIds", ListOfTimeTracksByUsersIds.class);
     }
 
 

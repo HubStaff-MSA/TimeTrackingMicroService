@@ -31,7 +31,7 @@ public class getTimeSheetCommand  implements Command {
 
     @Override
     public void execute() {
-        this.returned = trackTimeService.getTimeSheet(organizationID, userID);
+        this.returned = this.trackTimeService.getTimeSheet(this.organizationID, this.userID);
         if(this.organizationID == 1 && this.userID == 1){
             System.out.println("Invalid organizationID or userID");
         }

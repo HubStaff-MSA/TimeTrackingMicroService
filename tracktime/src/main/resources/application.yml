@@ -19,7 +19,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   cache:
@@ -31,6 +31,8 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
+  rabbitmq:
+    addresses: localhost:5672
 #  devtools:
 #    restart:
 #      enabled: true

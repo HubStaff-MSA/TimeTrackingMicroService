@@ -52,6 +52,7 @@ public class TrackTimeScheduled {
                             .userId(trackTime.getUserId())
                             .to_do(trackTime.getTo_do())
                             .startTime(trackTime.getStartTime())
+                                    .userName(trackTime.getUserName())
                             .day(trackTime.getDay())
                             .endTime(trackTime.getEndTime())
                             .duration(durationSeconds)

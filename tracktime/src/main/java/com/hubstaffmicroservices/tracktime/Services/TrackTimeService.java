@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -111,7 +113,7 @@ public class TrackTimeService{
 //    }
 
 //    @CachePut(value = "myCache", key = "#userId", cacheManager = "cacheManager")
-    public List<TrackTime> startTrackTimeSheet(String project, String to_do) {
+    public List<TrackTime> startTrackTimeSheet(TrackTime gtrackTime) {
         int userId = getUserID();
 
         List<TrackTime> trackTimes = cacheManager.getCache("myCache").get(userId, List.class);
@@ -134,8 +136,9 @@ public class TrackTimeService{
         // Create a new TrackTime object
         TrackTime trackTime = TrackTime.builder()
                 .userId(userId)
-                .project(project)
-                .to_do(to_do)
+                .project(gtrackTime.getProject())
+                .to_do(gtrackTime.getTo_do())
+                .userName(gtrackTime.getUserName())
                 .startTime(startTime)
                 .day(LocalDate.now())
                 .build();
@@ -184,7 +187,7 @@ public class TrackTimeService{
 
 
 
-    @Cacheable(value = "myCache", key = "'userId'", cacheManager = "cacheManager")
+    @CachePut(value = "myCache", key = "'userId'", cacheManager = "cacheManager")
     public int saveUserID(int userId) {
         return userId;
     }
@@ -218,7 +221,7 @@ public class TrackTimeService{
 
 
     public TrackTime getTimeSheet(int id , int organisationID) {
-        return trackTimeRepository.findByIdAndOrganizationID(id,organisationID);
+        return trackTimeRepository.findByUserIdAndOrganizationID(id,organisationID);
     }
 
     public List<TrackTime> getListOfTrackTimeByUserId(int userId) {
@@ -228,6 +231,26 @@ public class TrackTimeService{
     public Map<String, Map<LocalDate, Duration>> getTotalDurationByUserIdsAndDays(List<Integer> userIds) {
         return trackTimeRepository.getTotalDurationByUserIdsAndDays(userIds);
     }
+
+    public Map<Integer, Long> getTotalDurationByUserIds(List<Integer> userIds) {
+        List<TrackTime> trackTimes = trackTimeRepository.findByUserIdIn(userIds);
+
+        return trackTimes.stream()
+                .collect(Collectors.groupingBy(TrackTime::getUserId,
+                        Collectors.summingDouble(tt -> {
+                            Duration duration = Duration.between(tt.getStartTime(), tt.getEndTime());
+                            return duration.toSeconds();
+                        })))
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> (long) (entry.getValue() / 60)));
+    }
+
+//    public Map<Integer, Float> getTotalDurationByUserIds(List<Integer> userIds) {
+//        return trackTimeRepository.getTotalDurationByUserIds(userIds);
+//    }
+//
+
 
 //    public
 

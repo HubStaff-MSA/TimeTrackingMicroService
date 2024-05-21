@@ -17,10 +17,13 @@ public interface TrackTimeRepository extends JpaRepository<TrackTime, Integer> {
     TrackTime findByUserId(int i);
 
 
-     TrackTime findByIdAndOrganizationID(Integer id, int organizationID);
+     TrackTime findByUserIdAndOrganizationID(Integer id, int organizationID);
 
+    List<TrackTime> findByUserIdIn(List<Integer> userIds);
 
     @Query("SELECT t.userName, t.day, SUM(t.duration) FROM TrackTime t WHERE t.userId IN :userIds GROUP BY t.userName, t.day")
     Map<String, Map<LocalDate, Duration>> getTotalDurationByUserIdsAndDays(@Param("userIds") List<Integer> userIds);
+
+
 
 }
