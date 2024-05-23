@@ -1,6 +1,7 @@
 package com.hubstaffmicroservices.tracktime.Controller;
 
 import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
+import com.hubstaffmicroservices.tracktime.Commands.ListOfEmployeesTrackTimeCommand;
 import com.hubstaffmicroservices.tracktime.Commands.ListOfTimeTracksByUsersIds;
 import com.hubstaffmicroservices.tracktime.Commands.getTimeSheetCommand;
 import jakarta.annotation.PostConstruct;
@@ -26,6 +27,7 @@ public class CommandsMap {
         cmdMap.put("add", LastCommand.class);
         cmdMap.put("getTimeSheetCommand" , getTimeSheetCommand.class);
         cmdMap.put("ListOfTimeTracksByUsersIds", ListOfTimeTracksByUsersIds.class);
+        cmdMap.put("ListOfEmployeesTrackTimeCommand", ListOfEmployeesTrackTimeCommand.class);
     }
 
 

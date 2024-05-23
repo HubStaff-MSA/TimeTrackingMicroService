@@ -16,8 +16,10 @@ public interface TrackTimeRepository extends JpaRepository<TrackTime, Integer> {
     List<TrackTime> findAllByUserId(int i);
     TrackTime findByUserId(int i);
 
+    List<TrackTime> findByUserIdAndProject(Integer userId, String project);
 
-     TrackTime findByUserIdAndOrganizationID(Integer id, int organizationID);
+
+    TrackTime findByUserIdAndOrganizationID(Integer id, int organizationID);
 
     List<TrackTime> findByUserIdIn(List<Integer> userIds);
 

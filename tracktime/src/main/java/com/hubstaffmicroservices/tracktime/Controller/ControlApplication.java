@@ -15,7 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentMap;
 
 @RestController
-@RequestMapping("/api/v2/control/tracktime")
+@RequestMapping("/api/v2/control")
 @RequiredArgsConstructor
 public class ControlApplication {
 

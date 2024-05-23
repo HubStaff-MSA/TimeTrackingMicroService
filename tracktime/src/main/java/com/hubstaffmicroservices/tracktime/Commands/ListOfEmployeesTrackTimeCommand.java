@@ -6,15 +6,15 @@ import com.hubstaffmicroservices.tracktime.dto.TT_dto;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ListOfEmployeesTrackTimeCommand  implements Command{
 
-    private Map<String,Integer> mapOfProjectUserID;
-
-//    private   mmap;
-
+    private Map<Integer, List<String>> mapOfUserIdProject;
     private List<TT_dto> returned;
 
     private final TrackTimeService trackTimeService;
@@ -27,37 +27,30 @@ public class ListOfEmployeesTrackTimeCommand  implements Command{
 
     @Override
     public void execute() {
-//        this.mmap = trackTimeService.getTotalDurationByUserIdsAndDays(userIds);
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{\n");
-//        for (Map.Entry<String, Map<LocalDate, Duration>> entry : this.mmap.entrySet()) {
-//            builder.append("\t").append(entry.getKey()).append(":\n");
-//            for (Map.Entry<LocalDate, Duration> innerEntry : entry.getValue().entrySet()) {
-//                builder.append("\t\t").append(innerEntry.getKey()).append(": ").append(innerEntry.getValue()).append("\n");
-//            }
-//        }
-//        builder.append("}");
-//        this.returned = TT_dto.builder()
-//                .mapOfUserIDProjectNameDuration(mmap)
-//                .build();
-//        List<TrackTime> usedDTO= trackTimeService.getTotalDurationByUserIdsAndDays(userID);
-//        this.returned = usedDTO.stream()
-//                .map(TrackTime -> TT_dto.builder()
-//                        .organizationID(TrackTime.getOrganizationID())
-//                        .project(TrackTime.getProject())
-//                        .to_do(TrackTime.getTo_do())
-//                        .userName(TrackTime.getUserName())
-//                        .startTime(TrackTime.getStartTime())
-//                        .endTime(TrackTime.getEndTime())
-//                        .day(TrackTime.getDay())
-//                        .duration(TrackTime.getDuration())
-//                        .build())
-//                .toList();
+        // Call the service method to get the total duration map for each project for each user ID
+        Map<Integer, Map<String, Long>> totalDurationMap = trackTimeService.getTotalDurationOfEachUserAtProject(mapOfUserIdProject);
 
+        // Map the result to a list of TT_dto objects
+        this.returned = totalDurationMap.entrySet().stream()
+                .flatMap(userEntry -> userEntry.getValue().entrySet().stream()
+                        .map(projectEntry -> TT_dto.builder()
+                                .userId(userEntry.getKey())
+                                .project(projectEntry.getKey())
+                                .duration(projectEntry.getValue())
+                                .build()))
+                .collect(Collectors.toList());
     }
-
     public void build(Object payload) {
-        this.mapOfProjectUserID = (Map<String,Integer>) payload;
+        this.mapOfUserIdProject = new HashMap<>();
+        Map<String, List<String>> payloadMap = (Map<String, List<String>>) payload;
+        for (Map.Entry<String, List<String>> entry : payloadMap.entrySet()) {
+            try {
+                int userId = Integer.parseInt(entry.getKey());
+                this.mapOfUserIdProject.put(userId, entry.getValue());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid user ID: " + entry.getKey());
+                // Handle or log the exception as needed
+            }
+        }
     }
-
 }
