@@ -30,13 +30,24 @@ public class  RabbitMQConfig {
     }
 
     @Bean
-    public Queue commandQueue() {
-        return new Queue("commandQueue", false);
+    public Queue commandQueueTimeTrack() {
+        return new Queue("commandQueueTimeTracking", false);
     }
     @Bean
-    public Queue trackTimeQueue() {
-        return new Queue("trackTimeQueue", false);
+    public Queue commandQueueProjects() {
+        return new Queue("commandQueueProjects", false);
     }
+    @Bean
+    public Queue ReportsQueue() {
+        return new Queue("TT_R_Queue", false);
+    }
+    @Bean
+    public Queue FiananceQueue() {
+        return new Queue("TT_F_Queue", false);
+    }
+
+
+
 
     @Bean
     public Queue project_reportsQueue()  {return new Queue("project_reportsQueue", false);}

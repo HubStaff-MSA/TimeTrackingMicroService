@@ -2,6 +2,7 @@ package com.hubstaffmicroservices.tracktime.Services;
 
 import com.hubstaffmicroservices.tracktime.Models.TrackTime;
 import com.hubstaffmicroservices.tracktime.Repos.TrackTimeRepository;
+import com.hubstaffmicroservices.tracktime.dto.TT_dto;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -232,18 +230,37 @@ public class TrackTimeService{
         return trackTimeRepository.getTotalDurationByUserIdsAndDays(userIds);
     }
 
+    public Map<Integer, Map<String, Long>> getTotalDurationOfEachUserAtProject(Map<Integer, List<String>> mapOfUserIdProject) {
+        Map<Integer, Map<String, Long>> result = new HashMap<>();
+
+        mapOfUserIdProject.forEach((userId, projects) -> {
+            Map<String, Long> projectDurationMap = projects.stream()
+                    .collect(Collectors.toMap(project -> project, project -> {
+                        List<TrackTime> trackTimes = trackTimeRepository.findByUserIdAndProject(userId, project);
+
+                        return trackTimes.stream()
+                                .mapToLong(TrackTime::getDuration)
+                                .sum();
+                    }));
+
+            result.put(userId, projectDurationMap);
+        });
+
+        return result;
+    }
+
     public Map<Integer, Long> getTotalDurationByUserIds(List<Integer> userIds) {
         List<TrackTime> trackTimes = trackTimeRepository.findByUserIdIn(userIds);
 
         return trackTimes.stream()
                 .collect(Collectors.groupingBy(TrackTime::getUserId,
-                        Collectors.summingDouble(tt -> {
-                            Duration duration = Duration.between(tt.getStartTime(), tt.getEndTime());
-                            return duration.toSeconds();
-                        })))
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> (long) (entry.getValue() / 60)));
+                        Collectors.summingLong(TrackTime::getDuration)));
+//        return trackTimes.stream()
+//                .collect(Collectors.groupingBy(TrackTime::getUserId,
+//                        Collectors.summingLong(TrackTime::getDuration)))
+//                .entrySet()
+//                .stream()
+//                .collect(Collectors.toMap(Map.Entry::getKey, entry -> (long) (entry.getValue() / 60)));
     }
 
 //    public Map<Integer, Float> getTotalDurationByUserIds(List<Integer> userIds) {

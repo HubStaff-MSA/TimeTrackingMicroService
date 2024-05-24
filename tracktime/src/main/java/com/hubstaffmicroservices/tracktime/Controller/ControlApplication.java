@@ -15,7 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentMap;
 
 @RestController
-@RequestMapping("/api/v2/control/tracktime")
+@RequestMapping("/api/v2/control")
 @RequiredArgsConstructor
 public class ControlApplication {
 
@@ -24,11 +24,10 @@ public class ControlApplication {
     private final FreezeConfig freezeConfig;
 
     private final BigController bigController;
-//    @PostMapping("/addCommand")
-//    public Queue<TrackTime> addCommandSaveTrackTime() {
-//        return trackTimeService.addCommand();
-//    }
-    //    @PostMapping("/maxConnections")
+
+//    private final DatabaseConfig databaseConfig;
+//
+//    @PostMapping("/maxConnections")
 //    public String updateMaxConnections(@RequestBody int newMaxConnections) {
 //        databaseConfig.updateMaxDbConnectionsCount(newMaxConnections);
 //        return "Max connections updated to " + newMaxConnections;
@@ -45,12 +44,6 @@ public class ControlApplication {
         return "Application unfrozen";
     }
 
-    @PostMapping("/update")
-    public String updateTrackTime() throws IOException {
-        return bigController.replace("com.hubstaffmicroservices.tracktime.Controller.UpdatedClass", "add",bigController.TestModify());
-    }
-
-
     @PostMapping("/addcommand")
     public ConcurrentMap<String, Class<?>> addCommand(@RequestBody Map<String, String> request) throws IOException {
         try {
@@ -65,31 +58,4 @@ public class ControlApplication {
         CommandsMap.delete(request.get("name"));
         return CommandsMap.returnMap();
     }
-
-
-    @GetMapping("/getFields")
-    public String getFields() {
-        String fieldsString = "";
-        Field[] fields = CommandsMap.class.getFields();
-        for (Field field : fields) {
-            fieldsString += field.getName() + " ";
-        }
-        return fieldsString;
-    }
-
-    @PostMapping("/updatecommand")
-    public ConcurrentMap<String, Class<?>> updateCommand(@RequestBody Map<String, String> request) throws NoSuchFieldException {
-
-        CommandsMap.update(request.get("name"));
-        return CommandsMap.returnMap();
-
-    }
-
-    @PostMapping("/testupdatecommand")
-    public int testUpdateCommand(@RequestBody Map<String, Integer> request)  {
-
-        var c = LastCommand.add(request.get("a") , request.get("b"));
-        return c;
-    }
-
 }

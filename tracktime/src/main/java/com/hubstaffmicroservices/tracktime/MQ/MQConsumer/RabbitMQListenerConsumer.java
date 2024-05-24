@@ -25,11 +25,11 @@ public class RabbitMQListenerConsumer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @RabbitListener(queues = "commandQueue")
+    @RabbitListener(queues = "commandQueueTimeTracking")
     public void receiveMessage(CommandSender commandSender) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         System.out.println("Received command: " + commandSender.getCommand());
         System.out.println("Received payload: " + commandSender.getPayload());
-        System.out.println("Calling command map: " + commandSender.getRequestQueue());
+        System.out.println("Response Queue : " + commandSender.getRequestQueue());
 
         Object returnedValue = callCmdMap(commandSender.getCommand() , commandSender.getPayload());
 

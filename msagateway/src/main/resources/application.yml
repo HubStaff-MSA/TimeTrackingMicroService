@@ -1,0 +1,23 @@
+eureka:
+  client:
+    register-with-eureka: false
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway
+  main:
+    web-application-type: reactive
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      routes:
+        - id: control-and-students
+          uri: no://op  # Dummy URI, as we will handle forwarding in the filter
+          predicates:
+            - Path=/api/v2/control/**
+          filters:
+            - name: BroadcastFilter
