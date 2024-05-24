@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
 @Slf4j
 @Configuration
 public class FreezeConfig {
@@ -50,15 +49,19 @@ public class FreezeConfig {
     }
 
     private synchronized void freeze() throws SQLException {
-//       Connection myconnection =  dataSource.getConnection();
         isFrozen = true;
-//        dataSource.evictConnection(myconnection);
+        // Optionally evict connections but do not close the datasource
+//        dataSource.evictConnection(dataSource.getConnection());
         dataSource.close();
     }
 
     private synchronized void unfreeze() {
         isFrozen = false;
-        dataSource = createDataSource(); // Reinitialize the datasource
+        // Ensure the DataSource is in a valid state
+        if (dataSource.isClosed()) {
+            dataSource = createDataSource(); // Reinitialize the DataSource
+        }
+        log.info("Application unfrozen.");
     }
 
     @PreDestroy
@@ -71,6 +74,8 @@ public class FreezeConfig {
     private HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://localhost:5433/abdallahehab");
+        config.setUsername("your-username"); // Set your DB username
+        config.setPassword("your-password"); // Set your DB password
         config.setMaximumPoolSize(10);  // Adjust the number as needed
         config.setMinimumIdle(5);
         config.setIdleTimeout(60000);

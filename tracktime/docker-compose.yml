@@ -1,4 +1,29 @@
+version: '3.8'
+
 services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: abdallahehab
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - spring-boot-network
+    restart: unless-stopped
+  app:
+    image: 'tt:latest'
+    build:
+      context: .
+    container_name: app
+    ports:
+      - "8050:8050"
+    networks:
+      - spring-boot-network
+    depends_on:
+      - postgres
   rabbitmq:
     image: 'rabbitmq:3.6-management-alpine'
     ports:
@@ -16,6 +41,12 @@ services:
       RABBITMQ_DEFAULT_PASS: "guest"
     networks:
       - spring
+
+volumes:
+  postgres:
+
 networks:
-  spring:
-     driver: bridge
+    spring-boot-network:
+        driver: bridge
+    spring:
+        driver: bridge
