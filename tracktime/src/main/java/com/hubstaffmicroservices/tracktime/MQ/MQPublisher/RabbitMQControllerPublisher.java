@@ -20,10 +20,10 @@ public class RabbitMQControllerPublisher {
         this.rabbitMQService = rabbitMQService;
     }
 
-    @PostMapping("/commandQueueProjects")
+    @PostMapping("/sendCommandTrackTime")
     public String sendCommandProjects(@RequestBody CommandSender commandSender) {
         try {
-            rabbitMQService.sendMessage("commandQueueProjects", commandSender);
+            rabbitMQService.sendMessage("commandQueueTimeTracking", commandSender);
             return "Message sent to commandQueue: " + commandSender;
         } catch (Exception e) {
             return "Failed to send message: " + e.getMessage();

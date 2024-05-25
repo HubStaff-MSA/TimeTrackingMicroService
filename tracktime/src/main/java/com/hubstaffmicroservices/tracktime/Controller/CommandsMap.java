@@ -1,6 +1,6 @@
 package com.hubstaffmicroservices.tracktime.Controller;
 
-import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
+import com.hubstaffmicroservices.tracktime.Commands.CreateTimeSheetCommand;
 import com.hubstaffmicroservices.tracktime.Commands.ListOfEmployeesTrackTimeCommand;
 import com.hubstaffmicroservices.tracktime.Commands.ListOfTimeTracksByUsersIds;
 import com.hubstaffmicroservices.tracktime.Commands.getTimeSheetCommand;
@@ -24,10 +24,10 @@ public class CommandsMap {
     @PostConstruct
     public static void instantiate() {
         cmdMap = new ConcurrentHashMap<>();
-        cmdMap.put("add", LastCommand.class);
         cmdMap.put("getTimeSheetCommand" , getTimeSheetCommand.class);
         cmdMap.put("ListOfTimeTracksByUsersIds", ListOfTimeTracksByUsersIds.class);
         cmdMap.put("ListOfEmployeesTrackTimeCommand", ListOfEmployeesTrackTimeCommand.class);
+        cmdMap.put("CreateTimeSheetCommand" , CreateTimeSheetCommand.class);
     }
 
 

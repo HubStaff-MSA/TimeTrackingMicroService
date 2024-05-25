@@ -1,6 +1,5 @@
 package com.hubstaffmicroservices.tracktime.Controller;
 
-import com.hubstaffmicroservices.tracktime.Commands.LastCommand;
 import com.hubstaffmicroservices.tracktime.Models.TrackTime;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,13 +70,13 @@ public class UpdateTemp {
         }
     }
 
-
-    @PostMapping("/testupdatecommand")
-    public int testUpdateCommand(@RequestBody Map<String, Integer> request)  {
-
-        var c = LastCommand.add(request.get("a") , request.get("b"));
-        return c;
-    }
+//
+//    @PostMapping("/testupdatecommand")
+//    public int testUpdateCommand(@RequestBody Map<String, Integer> request)  {
+//
+//        var c = LastCommand.add(request.get("a") , request.get("b"));
+//        return c;
+//    }
 
     @GetMapping("/getFields")
     public String getFields() {

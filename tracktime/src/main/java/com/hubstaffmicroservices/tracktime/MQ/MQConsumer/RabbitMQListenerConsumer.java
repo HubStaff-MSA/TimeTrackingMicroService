@@ -2,7 +2,9 @@ package com.hubstaffmicroservices.tracktime.MQ.MQConsumer;
 
 import com.hubstaffmicroservices.tracktime.Controller.CommandsMap;
 import com.hubstaffmicroservices.tracktime.MQ.dto.CommandSender;
+import com.hubstaffmicroservices.tracktime.MQ.dto.ProjectDTO;
 import com.hubstaffmicroservices.tracktime.Services.TrackTimeService;
+import lombok.Data;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -29,17 +32,31 @@ public class RabbitMQListenerConsumer {
     public void receiveMessage(CommandSender commandSender) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         System.out.println("Received command: " + commandSender.getCommand());
         System.out.println("Received payload: " + commandSender.getPayload());
-        System.out.println("Response Queue : " + commandSender.getRequestQueue());
+       // System.out.println("Response Queue : " + commandSender.getRequestQueue());
 
         Object returnedValue = callCmdMap(commandSender.getCommand() , commandSender.getPayload());
 
         System.out.println(returnedValue);
         // Cast the returned value to TrackTime
         if (returnedValue != null) {
-            rabbitTemplate.convertAndSend(commandSender.getRequestQueue(), returnedValue);
+            rabbitTemplate.convertAndSend(commandSender.getRequestingQueue(), returnedValue);
             System.out.println("Published returned value to tracktime queue.");
         }
     }
+
+//    @RabbitListener(queues = "WebServerCommandQueueTimeTracking")
+//    public Object WebServerReceiveMessage(CommandSender commandSender) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+//        System.out.println("Received command: " + commandSender.getCommand());
+//        System.out.println("Received payload: " + commandSender.getPayload());
+//        System.out.println("Response Queue : " + commandSender.getRequestQueue());
+//
+//        Object returnedValue = callCmdMap(commandSender.getCommand() , commandSender.getPayload());
+//
+//        return returnedValue;
+//    }
+
+
+
 
     public Object callCmdMap(String Command , Object Payload) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
         Field cmdMapField = CommandsMap.class.getDeclaredField("cmdMap");
@@ -54,7 +71,7 @@ public class RabbitMQListenerConsumer {
         Class<?> commandClass = (Class<?>) cmdMap.get(Command);
 
         // Object commandInstance = commandClass.newInstance();
-        Object commandInstance = commandClass.getDeclaredConstructor(TrackTimeService.class).newInstance(trackTimeService);
+        Object commandInstance = commandClass.getDeclaredConstructor(TrackTimeService.class , RabbitTemplate.class).newInstance(trackTimeService , rabbitTemplate );
 
         // Get the build method of the command class
         Method buildMethod = commandClass.getDeclaredMethod("build", Object.class);
@@ -79,5 +96,12 @@ public class RabbitMQListenerConsumer {
 
         return returnedValue;
     }
+
+//    @RabbitListener(queues = "P_TT_Queue")
+//    public void receivePM(List<ProjectDTO> projectDTO) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+//        {
+//                this.myRetuned  = projectDTO;
+//        }
+//    }
 
 }

@@ -9,7 +9,7 @@
 	<id>tracktime</id>
 
 	<classpath>
-		<dir name="/Users/abdallahehab/Documents/GUC/Semester 10/Scalable/HubStaffMSA/TimeTrackingMicroService/tracktime/target/classes">
+		<dir name="/Users/abdallahehab/Documents/GUC/Semester 10/Scalable/HubStaffMSA/TimeTrackingMicroService/tracktime/src/main/java/com/hubstaffmicroservices/tracktime/Commands">
 		</dir>
 	</classpath>
 

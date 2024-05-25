@@ -46,6 +46,11 @@ public class  RabbitMQConfig {
         return new Queue("TT_F_Queue", false);
     }
 
+    @Bean
+    public Queue PMQueue() {
+        return new Queue("P_TT_Queue", false);
+    }
+
 
 
 
